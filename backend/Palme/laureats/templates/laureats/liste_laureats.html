@@ -12,8 +12,11 @@
             {% csrf_token %}
             <input type="submit" value="Supprimer">
         </form>
-        </li>
+        
     {% endfor %}
     </ul>
+    <script>
+        window.history.replaceState({}, document.title, "/");
+    </script>
 </body>
 </html>

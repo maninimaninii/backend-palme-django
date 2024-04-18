@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Films</title>
+</head>
+<body>
+    <h1>Liste des Films</h1>
+    <ul>
+    {% for film in films %}
+        <li>{{ film.NomFilm }} - {{ film.Pays }}- {{ film.Sexe }}- {{ film.NomRealisateur }}- {{ film.EditionPrix }}- {{ film.NomPrix }}</li>
+        <form action="{% url 'supprimer_film' film.idFilm  %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Supprimer">
+        </form>
+    {% endfor %}
+    </ul>
+
+    <script>
+        window.history.replaceState({}, document.title, "/");
+    </script>
+</body>
+</html>
