@@ -16,6 +16,25 @@ class ModifierFilmForm(forms.Form):
         self.fields['realisateur'].choices = realisateur_choices
 
 
+class ModifierLaureatForm(forms.Form):
+    METIER_CHOICES = [
+        ('acteur', 'Acteur'),
+        ('scenariste', 'Scénariste'),
+        ('realisateur', 'Réalisateur'),
+        ('metteur_en_scene', 'Metteur en scène'),
+    ]
+
+    SEXE_CHOICES = [
+        ('masculin', 'Masculin'),
+        ('feminin', 'Féminin'),
+    ]
+
+    nom = forms.CharField(label='Nom du Lauréat', max_length=140, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    pays = forms.CharField(label='Pays d\'origine', max_length=60, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    metier = forms.ChoiceField(label='Métier', choices=METIER_CHOICES)
+    sexe = forms.ChoiceField(label='Sexe', choices=SEXE_CHOICES)
+
+
 
 class P09Film(models.Model):
     idfilm = models.AutoField(db_column='idFilm', primary_key=True)  # Field name made lowercase.

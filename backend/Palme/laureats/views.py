@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm, ModifierFilmForm
+from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm, ModifierFilmForm, ModifierLaureatForm
 
 def liste_laureats(request):
     laureats = P09Laureat.objects.all()
@@ -79,3 +79,21 @@ def modifier_film(request, film_id):
     else: #on cree le formulaire avec les infos préremplies depuis le film à modifier 
         form = ModifierFilmForm(initial={'titre': film.titrefilm, 'pays': film.paysfilm, 'realisateur': film.idrealisateur})
     return render(request, 'films/modifier_film.html', {'form': form}) #on renvoie la page de modification
+
+
+def modifier_laureat(request, laureat_id):
+    laureat = P09Laureat.objects.get(idlaureat=laureat_id)
+    if request.method == 'POST':  #formulairee soumis
+        form = ModifierLaureatForm(request.POST)
+        if form.is_valid():
+            laureat.nomlaureat = form.cleaned_data['nom']
+            laureat.pays = form.cleaned_data['pays']
+            laureat.metier = form.cleaned_data['metier']
+            laureat.sexe = form.cleaned_data['sexe']
+            laureat.save()
+            
+            # redirection liste car modification finie
+            return redirect('liste_laureats')
+    else: #on cree le formulaire avec les infos préremplies depuis le film à modifier 
+        form = ModifierLaureatForm(initial={'nom': laureat.nomlaureat, 'pays': laureat.pays, 'metier': laureat.metier, 'sexe' : laureat.sexe})
+    return render(request, 'laureats/modifier_laureat.html', {'form': form}) #on renvoie la page de modification

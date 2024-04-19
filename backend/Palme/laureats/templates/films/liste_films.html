@@ -1,22 +1,47 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Liste des Films</title>
+    <link rel='stylesheet' href="{% static 'css/stylelist.css' %}">
 </head>
+
 <body>
     <h1>Liste des Films</h1>
-    <ul>
-    {% for film in films %}
-        <li>{{ film.NomFilm }} - {{ film.Pays }}- {{ film.Sexe }}- {{ film.NomRealisateur }}- {{ film.EditionPrix }}- {{ film.NomPrix }}</li>
-        <form action="{% url 'supprimer_film' film.idFilm  %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Supprimer">
-        </form>
-        <form action="{% url 'modifier_film' film.idFilm  %}" method="get">
-            <input type="submit" value="Modifier">
-        </form>
-    {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du Film</th>
+                <th>Pays</th>
+                <th>Sexe</th>
+                <th>Nom du Réalisateur</th>
+                <th>Edition du Prix</th>
+                <th>Nom du Prix</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for film in films %}
+            <tr>
+                <td>{{ film.NomFilm }}</td>
+                <td>{{ film.Pays }}</td>
+                <td>{{ film.Sexe }}</td>
+                <td>{{ film.NomRealisateur }}</td>
+                <td>{{ film.EditionPrix }}</td>
+                <td>{{ film.NomPrix }}</td>
+                <td>
+                    <form action="{% url 'supprimer_film' film.idFilm  %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Supprimer">
+                    </form>
+                    <form action="{% url 'modifier_film' film.idFilm  %}" method="get">
+                        <input type="submit" value="Modifier">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <script>
         window.history.replaceState({}, document.title, "/");

@@ -1,20 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Liste des Lauréats</title>
+    <link rel='stylesheet' href="{% static 'css/stylelist.css' %}">
 </head>
 <body>
     <h1>Liste des Lauréats</h1>
-    <ul>
-    {% for laureat in laureats %}
-        <li>{{ laureat.NomLaureat }} - {{ laureat.Pays }}- {{ laureat.Sexe }}- {{ laureat.EditionPrix }}- {{ laureat.NomPrix }}</li>
-        <form action="{% url 'supprimer_laureat' laureat.idLaureat  %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Supprimer">
-        </form>
-        
-    {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Pays</th>
+                <th>Sexe</th>
+                <th>Edition du Prix</th>
+                <th>Nom du Prix</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for laureat in laureats %}
+            <tr>
+                <td>{{ laureat.NomLaureat }}</td>
+                <td>{{ laureat.Pays }}</td>
+                <td>{{ laureat.Sexe }}</td>
+                <td>{{ laureat.EditionPrix }}</td>
+                <td>{{ laureat.NomPrix }}</td>
+                <td>
+                    <form action="{% url 'supprimer_laureat' laureat.idLaureat  %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Supprimer">
+                    </form>
+                    <form action="{% url 'modifier_laureat' laureat.idLaureat  %}" method="get">
+                        <input type="submit" value="Modifier">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <script>
         window.history.replaceState({}, document.title, "/");
     </script>
