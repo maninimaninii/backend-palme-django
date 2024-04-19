@@ -1,12 +1,19 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django import forms
 
+class ModifierFilmForm(forms.Form):
+    titre = forms.CharField(label='Titre du film', max_length=140, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    pays = forms.CharField(label='Pays d\'origine du film', max_length=60, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    realisateur = forms.ChoiceField(label='Réalisateur')
+
+    def __init__(self, *args, **kwargs):
+        super(ModifierFilmForm, self).__init__(*args, **kwargs)
+        # Récupérer les laureats dont le métier est réalisateur
+        realisateurs = P09Laureat.objects.filter(metier='realisateur')
+        # Créer une liste d'options pour le champ de sélection du réalisateur
+        realisateur_choices = [(laureat.idlaureat, laureat.nomlaureat) for laureat in realisateurs]
+        # Remplir le champ de sélection avec les options
+        self.fields['realisateur'].choices = realisateur_choices
 
 
 

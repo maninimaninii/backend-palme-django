@@ -12,6 +12,9 @@
             {% csrf_token %}
             <input type="submit" value="Supprimer">
         </form>
+        <form action="{% url 'modifier_film' film.idFilm  %}" method="get">
+            <input type="submit" value="Modifier">
+        </form>
     {% endfor %}
     </ul>
 

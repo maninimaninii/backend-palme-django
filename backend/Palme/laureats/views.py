@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm
+from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm, ModifierFilmForm
 
 def liste_laureats(request):
     laureats = P09Laureat.objects.all()
@@ -60,6 +60,22 @@ def liste_films(request):
                 "EditionPrix": recompense.editionprixf,
                 "NomPrix": prix.nomprix
             })
-    return render(request, 'laureats/liste_films.html', {'films': films_list})
+    return render(request, 'films/liste_films.html', {'films': films_list})
 
 
+
+
+def modifier_film(request, film_id):
+    film = P09Film.objects.get(idfilm=film_id)
+    if request.method == 'POST':  #formulairee soumis
+        form = ModifierFilmForm(request.POST)
+        if form.is_valid():
+            film.titrefilm = form.cleaned_data['titre']
+            film.paysfilm = form.cleaned_data['pays']
+            film.idrealisateur = form.cleaned_data['realisateur']
+            film.save()
+            # redirection liste car modification finie
+            return redirect('liste_films')
+    else: #on cree le formulaire avec les infos préremplies depuis le film à modifier 
+        form = ModifierFilmForm(initial={'titre': film.titrefilm, 'pays': film.paysfilm, 'realisateur': film.idrealisateur})
+    return render(request, 'films/modifier_film.html', {'form': form}) #on renvoie la page de modification

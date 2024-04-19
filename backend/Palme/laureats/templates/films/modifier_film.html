@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Films</title>
+    <link rel='stylesheet' href="{% static 'css/stylform.css' %}">
+</head>
+<body>
+    <main>
+        <div class='formdiv'>
+            <form action='' method='post'>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type='submit' name='enregistrement' value='Modifier'>
+                <br>
+                <br>
+                <input type='reset' name ='annuler' value='Effacer'>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
