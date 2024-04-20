@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm, ModifierFilmForm, ModifierLaureatForm
+from .models import P09Laureat, P09Recompenserlaureat, P09Prix, P09Film, P09Recompenserfilm, ModifierFilmForm, ModifierLaureatForm,AjouterFilmForm, AjouterLaureatForm
 
 def liste_laureats(request):
     laureats = P09Laureat.objects.all()
@@ -81,6 +81,88 @@ def modifier_film(request, film_id):
     return render(request, 'films/modifier_film.html', {'form': form}) #on renvoie la page de modification
 
 
+
+
+
+def ajouter_film(request):
+    if request.method == 'POST':
+        form = AjouterFilmForm(request.POST)
+        if form.is_valid():
+            titre = form.cleaned_data['titre']
+            pays = form.cleaned_data['pays']
+            realisateur_id = form.cleaned_data['realisateur']
+            edition = form.cleaned_data['edition']
+            prix = form.cleaned_data['prixgagne']
+            
+            # création du film dans la base de données
+            film = P09Film.objects.create(
+                titrefilm=titre,
+                paysfilm=pays,
+                idrealisateur=realisateur_id
+            )
+
+            filme = P09Film.objects.get(titrefilm = titre)
+            recompense = P09Recompenserfilm.objects.create(
+                idfilm = filme.idfilm,
+                idprix = prix,
+                editionprixf = edition
+            )
+
+
+            # redirection vers la liste des films après ajout
+            return redirect('liste_films')
+    else:
+        form = AjouterFilmForm()
+    
+    return render(request, 'films/ajouter_film.html', {'form': form})
+
+
+
+
+
+def ajouter_laureat(request):
+    if request.method == 'POST':
+        form = AjouterLaureatForm(request.POST)
+        if form.is_valid():
+            nom = form.cleaned_data['nom']
+            pays = form.cleaned_data['pays']
+            sexe = form.cleaned_data['sexe']
+            metier = form.cleaned_data['metier']
+            edition = form.cleaned_data['edition']
+            prix = form.cleaned_data['prixgagne']
+            
+            # création du film dans la base de données
+            laureat = P09Laureat.objects.create(
+                nomlaureat=nom,
+                pays=pays,
+                sexe=sexe,
+                metier = metier
+            )
+
+            filme = P09Laureat.objects.get(nomlaureat = nom)
+            recompense = P09Recompenserlaureat.objects.create(
+                idlaureat = filme.idlaureat,
+                idprix = prix,
+                editionprixl = edition
+            )
+
+
+            # redirection vers la liste des films après ajout
+            return redirect('liste_laureats')
+    else:
+        form = AjouterLaureatForm()
+    
+    return render(request, 'laureats/ajouter_laureat.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
 def modifier_laureat(request, laureat_id):
     laureat = P09Laureat.objects.get(idlaureat=laureat_id)
     if request.method == 'POST':  #formulairee soumis
@@ -97,3 +179,6 @@ def modifier_laureat(request, laureat_id):
     else: #on cree le formulaire avec les infos préremplies depuis le film à modifier 
         form = ModifierLaureatForm(initial={'nom': laureat.nomlaureat, 'pays': laureat.pays, 'metier': laureat.metier, 'sexe' : laureat.sexe})
     return render(request, 'laureats/modifier_laureat.html', {'form': form}) #on renvoie la page de modification
+
+
+

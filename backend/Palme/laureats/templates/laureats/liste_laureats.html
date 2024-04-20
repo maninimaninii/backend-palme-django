@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Liste des Lauréats</title>
-    <link rel='stylesheet' href="{% static 'css/stylelist.css' %}">
+    <link rel='stylesheet' href="{% static 'css/stylellist.css' %}">
 </head>
 <body>
     <h1>Liste des Lauréats</h1>
@@ -26,7 +26,7 @@
                 <td>{{ laureat.Sexe }}</td>
                 <td>{{ laureat.EditionPrix }}</td>
                 <td>{{ laureat.NomPrix }}</td>
-                <td>
+                <td class="boutons">
                     <form action="{% url 'supprimer_laureat' laureat.idLaureat  %}" method="post">
                         {% csrf_token %}
                         <input type="submit" value="Supprimer">
@@ -40,7 +40,7 @@
         </tbody>
     </table>
     <script>
-        window.history.replaceState({}, document.title, "/");
+    
     </script>
 </body>
 </html>

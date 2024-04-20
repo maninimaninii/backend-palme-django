@@ -1,5 +1,6 @@
 from django.db import models
 from django import forms
+from django.forms.widgets import DateInput
 
 class ModifierFilmForm(forms.Form):
     titre = forms.CharField(label='Titre du film', max_length=140, widget=forms.TextInput(attrs={'class' : 'tit'}))
@@ -8,12 +9,14 @@ class ModifierFilmForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ModifierFilmForm, self).__init__(*args, **kwargs)
-        # Récupérer les laureats dont le métier est réalisateur
         realisateurs = P09Laureat.objects.filter(metier='realisateur')
-        # Créer une liste d'options pour le champ de sélection du réalisateur
         realisateur_choices = [(laureat.idlaureat, laureat.nomlaureat) for laureat in realisateurs]
-        # Remplir le champ de sélection avec les options
         self.fields['realisateur'].choices = realisateur_choices
+
+
+
+
+
 
 
 class ModifierLaureatForm(forms.Form):
@@ -33,6 +36,69 @@ class ModifierLaureatForm(forms.Form):
     pays = forms.CharField(label='Pays d\'origine', max_length=60, widget=forms.TextInput(attrs={'class' : 'tit'}))
     metier = forms.ChoiceField(label='Métier', choices=METIER_CHOICES)
     sexe = forms.ChoiceField(label='Sexe', choices=SEXE_CHOICES)
+
+
+
+
+
+
+
+
+
+
+class AjouterLaureatForm(forms.Form):
+
+    METIER_CHOICES = [
+        ('acteur', 'Acteur'),
+        ('scenariste', 'Scénariste'),
+        ('realisateur', 'Réalisateur'),
+        ('metteur_en_scene', 'Metteur en scène'),
+    ]
+    PRIX_CHOICES = [(4,'Prix d\'interpret masculine'), (5,'Prix d\'interpret feminine'), (6,'Prix de la mise en scène'),(7,'Prix du scénario')]
+    SEXE_CHOICES = [
+        ('masculin', 'Masculin'),
+        ('feminin', 'Féminin'),
+    ]
+
+    nom = forms.CharField(label='Nom du Lauréat', max_length=140, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    pays = forms.CharField(label='Pays d\'origine', max_length=60, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    metier = forms.ChoiceField(label='Métier', choices=METIER_CHOICES)
+    sexe = forms.ChoiceField(label='Sexe', choices=SEXE_CHOICES)
+    edition = forms.DateField(label='Edition',widget=DateInput(attrs={'type': 'date'}))
+    prixgagne = forms.ChoiceField(label="Prix remporté", choices = PRIX_CHOICES)
+
+
+
+
+
+
+
+
+
+class AjouterFilmForm(forms.Form):
+
+    PRIX_CHOICES = [(1,'Palme d\'or'), (2,'Grand Prix'), (3,'Prix du Jury')]
+
+    titre = forms.CharField(label='Titre du film', max_length=140, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    pays = forms.CharField(label='Pays d\'origine du film', max_length=60, widget=forms.TextInput(attrs={'class' : 'tit'}))
+    realisateur = forms.ChoiceField(label='Réalisateur')
+    edition = forms.DateField(label='Edition',widget=DateInput(attrs={'type': 'date'}))
+    prixgagne = forms.ChoiceField(label="Prix remporté", choices = PRIX_CHOICES)
+
+
+    def __init__(self, *args, **kwargs):
+        super(AjouterFilmForm, self).__init__(*args, **kwargs)
+        realisateurs = P09Laureat.objects.filter(metier='realisateur')
+        realisateur_choices = [(laureat.idlaureat, laureat.nomlaureat) for laureat in realisateurs]
+        self.fields['realisateur'].choices = realisateur_choices
+
+
+
+
+
+
+
+
 
 
 
